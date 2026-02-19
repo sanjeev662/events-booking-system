@@ -3,8 +3,7 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import PageHeader from '../components/PageHeader';
-
-const API = '/api';
+import { API } from '../api';
 
 export default function Success() {
   const { state } = useLocation();

@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-
-const API = '/api';
+import { API } from '../api';
 const GENDERS = ['Male', 'Female', 'Other'];
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
