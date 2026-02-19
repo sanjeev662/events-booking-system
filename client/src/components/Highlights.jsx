@@ -1,20 +1,20 @@
 const items = [
-  { label: 'Live DJ', icon: '🎧', color: 'from-pink-400 to-rose-500' },
-  { label: 'Food Stalls', icon: '🍜', color: 'from-amber-400 to-orange-500' },
-  { label: 'Neon Bands', icon: '🎸', color: 'from-violet-400 to-purple-500' },
-  { label: 'Selfie Zone', icon: '📸', color: 'from-cyan-400 to-blue-500' },
-  { label: 'Welcome Drink', icon: '🥤', color: 'from-green-400 to-emerald-500' },
-  { label: 'VIP & Public Zones', icon: '✨', color: 'from-fuchsia-400 to-pink-500' },
+  { label: 'Live DJ', icon: '🎧', color: 'from-holi-magenta to-holi-pink' },
+  { label: 'Food Stalls', icon: '🍜', color: 'from-holi-orange to-holi-yellow' },
+  { label: 'Neon Bands', icon: '🎸', color: 'from-holi-blue to-holi-magenta' },
+  { label: 'Selfie Zone', icon: '📸', color: 'from-holi-blue to-holi-green' },
+  { label: 'Welcome Drink', icon: '🥤', color: 'from-holi-green to-holi-blue' },
+  { label: 'VIP & Public Zones', icon: '✨', color: 'from-holi-pink to-holi-magenta' },
 ];
 
 export default function Highlights() {
   return (
-    <section id="highlights" className="relative py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-white/50 backdrop-blur-md">
+    <section id="highlights" className="section-holi-alt relative py-12 sm:py-16 md:py-20 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-center text-gray-800 mb-3 sm:mb-4">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-center text-transparent bg-clip-text bg-gradient-to-r from-holi-magenta via-holi-yellow to-holi-green mb-3 sm:mb-4">
           Event Highlights
         </h2>
-        <p className="text-center text-gray-600 text-sm sm:text-base max-w-2xl mx-auto mb-8 sm:mb-10 md:mb-12">
+        <p className="text-center text-gray-700 text-sm sm:text-base max-w-2xl mx-auto mb-8 sm:mb-10 md:mb-12">
           From live music and neon bands to food stalls and a dedicated selfie zone — everything you need for a perfect Holi evening.
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6">

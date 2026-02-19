@@ -30,9 +30,9 @@ export default function Home() {
           <RegistrationForm onPaymentSuccess={handlePaymentSuccess} />
         </div>
       </main>
-      <footer className="py-8 sm:py-10 px-4 sm:px-6 bg-gray-900/90 text-gray-300 text-sm">
+      <footer className="footer-holi py-8 sm:py-10 px-4 sm:px-6 text-gray-300 text-sm">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="font-semibold text-white text-base sm:text-lg">
+          <p className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-holi-magenta via-holi-yellow to-holi-green text-base sm:text-lg">
             Neon Holi Event 2026
           </p>
           <p className="mt-1 text-gray-400">
@@ -40,17 +40,17 @@ export default function Home() {
           </p>
           <p className="mt-4 text-gray-400 max-w-md mx-auto">
             For sponsorship and stall booking enquiries, contact us at{' '}
-            <a href="tel:9111001103" className="text-pink-400 hover:text-pink-300">9111001103</a>,{' '}
-            <a href="tel:8115170451" className="text-pink-400 hover:text-pink-300">8115170451</a>,{' '}
-            <a href="tel:7525018241" className="text-pink-400 hover:text-pink-300">7525018241</a>.
+            <a href="tel:9111001103" className="link-holi font-medium hover:underline">9111001103</a>,{' '}
+            <a href="tel:8115170451" className="link-holi font-medium hover:underline">8115170451</a>,{' '}
+            <a href="tel:7525018241" className="link-holi font-medium hover:underline">7525018241</a>.
           </p>
           <p className="mt-3 text-gray-500 text-xs">
             Branding &amp; Marketing by Dizilight India Private Limited
           </p>
-          <div className="mt-6 pt-4 border-t border-gray-700/50 flex flex-wrap justify-center gap-4">
+          <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap justify-center gap-4">
             <Link
               to="/admin"
-              className="text-gray-500 hover:text-gray-400 text-xs font-medium transition-colors"
+              className="text-holi-yellow/90 hover:text-holi-yellow text-xs font-medium transition-colors"
             >
               Admin
             </Link>

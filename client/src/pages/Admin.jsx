@@ -69,26 +69,26 @@ export default function Admin() {
   if (!authenticated) {
     return (
       <div className="min-h-screen splash-bg">
-        <header className="flex items-center justify-between px-4 py-3 bg-white/80 backdrop-blur border-b border-pink-200/40">
-          <Link to="/" className="text-lg font-bold text-pink-600">Neon Holi 2026</Link>
-          <Link to="/" className="text-sm text-gray-600 hover:text-pink-600">Home</Link>
+        <header className="header-holi flex items-center justify-between px-4 py-3">
+          <Link to="/" className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-holi-magenta to-holi-green">Neon Holi 2026</Link>
+          <Link to="/" className="text-sm font-medium text-gray-700 hover:text-holi-magenta transition-colors">Home</Link>
         </header>
         <div className="flex items-center justify-center px-4 py-12">
         <form
           onSubmit={handleLogin}
-          className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-white/90 backdrop-blur shadow-2xl border-2 border-pink-200/50 max-w-sm w-full animate-scale-in"
+          className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-white/95 backdrop-blur shadow-2xl card-border-holi max-w-sm w-full animate-scale-in"
         >
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Admin Login</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-holi-magenta to-holi-green mb-4 sm:mb-6">Admin Login</h1>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
-            className="input-holi w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-pink-500 outline-none mb-4 min-h-[48px]"
+            className="input-holi w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-holi-magenta outline-none mb-4 min-h-[48px]"
           />
           <button
             type="submit"
-            className="btn-holi w-full py-3 rounded-xl font-bold bg-gradient-to-r from-pink-500 to-cyan-500 text-white min-h-[48px]"
+            className="btn-holi w-full py-3 rounded-xl font-bold bg-gradient-to-r from-holi-magenta to-holi-green text-white min-h-[48px] neon-border"
           >
             Login
           </button>
@@ -100,38 +100,38 @@ export default function Admin() {
 
   return (
     <div className="min-h-screen splash-bg">
-      <header className="flex items-center justify-between px-4 py-3 bg-white/80 backdrop-blur border-b border-pink-200/40">
-        <Link to="/" className="text-lg font-bold text-pink-600">Neon Holi 2026</Link>
-        <Link to="/" className="text-sm text-gray-600 hover:text-pink-600">Home</Link>
+      <header className="header-holi flex items-center justify-between px-4 py-3">
+        <Link to="/" className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-holi-magenta to-holi-green">Neon Holi 2026</Link>
+        <Link to="/" className="text-sm font-medium text-gray-700 hover:text-holi-magenta transition-colors">Home</Link>
       </header>
       <div className="py-6 sm:py-8 md:py-10 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-between gap-4 mb-6">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">Registrations</h1>
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-holi-magenta to-holi-green">Registrations</h1>
           <div className="flex flex-wrap gap-2 sm:gap-3">
             <button
               onClick={fetchList}
               disabled={loading}
-              className="btn-holi flex-1 sm:flex-none px-4 py-3 rounded-xl bg-cyan-500 text-white font-semibold disabled:opacity-70 min-h-[44px]"
+              className="btn-holi flex-1 sm:flex-none px-4 py-3 rounded-xl bg-holi-blue text-white font-semibold disabled:opacity-70 min-h-[44px]"
             >
               Refresh
             </button>
             <button
               onClick={handleExport}
               disabled={exporting}
-              className="btn-holi flex-1 sm:flex-none px-4 py-3 rounded-xl bg-green-500 text-white font-semibold disabled:opacity-70 min-h-[44px]"
+              className="btn-holi flex-1 sm:flex-none px-4 py-3 rounded-xl bg-holi-green text-white font-semibold disabled:opacity-70 min-h-[44px]"
             >
               {exporting ? 'Exporting…' : 'Download Excel'}
             </button>
           </div>
         </div>
-        <div className="rounded-2xl bg-white/90 backdrop-blur shadow-xl border-2 border-pink-200/50 overflow-hidden overflow-x-auto">
+        <div className="rounded-2xl bg-white/95 backdrop-blur shadow-xl card-border-holi overflow-hidden overflow-x-auto">
           {loading ? (
             <div className="p-8 sm:p-12 text-center text-gray-600">Loading…</div>
           ) : (
             <table className="w-full text-left text-xs sm:text-sm min-w-[640px]">
               <thead>
-                <tr className="bg-pink-100 border-b border-pink-200">
+                <tr className="bg-holi-magenta/10 border-b-2 border-holi-magenta/30">
                   <th className="p-2 sm:p-3 font-bold">Name</th>
                   <th className="p-2 sm:p-3 font-bold">Email</th>
                   <th className="p-2 sm:p-3 font-bold">Mobile</th>
@@ -146,7 +146,7 @@ export default function Admin() {
                   <tr><td colSpan={7} className="p-6 sm:p-8 text-center text-gray-500">No registrations yet</td></tr>
                 ) : (
                   list.map((r) => (
-                    <tr key={r._id} className="border-b border-gray-200 hover:bg-pink-50/50 transition-colors">
+                    <tr key={r._id} className="border-b border-gray-200 hover:bg-holi-magenta/5 transition-colors">
                       <td className="p-2 sm:p-3 font-medium">{r.name}</td>
                       <td className="p-2 sm:p-3 truncate max-w-[140px] sm:max-w-[200px]">{r.email}</td>
                       <td className="p-2 sm:p-3">{r.mobile}</td>

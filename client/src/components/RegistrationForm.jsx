@@ -88,7 +88,7 @@ export default function RegistrationForm({ onPaymentSuccess }) {
           }
         },
         prefill: { name: form.name, email: form.email, contact: form.mobile },
-        theme: { color: '#ff1493' },
+        theme: { color: '#e91e8c' },
       };
       const rzp = new window.Razorpay(options);
       rzp.on('payment.failed', () => {
@@ -103,17 +103,17 @@ export default function RegistrationForm({ onPaymentSuccess }) {
   };
 
   return (
-    <section id="register" className="relative py-12 sm:py-16 md:py-20 px-4 sm:px-6">
+    <section id="register" className="section-holi relative py-12 sm:py-16 md:py-20 px-4 sm:px-6">
       <div className="max-w-lg mx-auto">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-center text-gray-800 mb-2 sm:mb-3 animate-fade-in-up">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-center text-transparent bg-clip-text bg-gradient-to-r from-holi-magenta via-holi-yellow to-holi-green mb-2 sm:mb-3 animate-fade-in-up">
           Register for Neon Holi
         </h2>
-        <p className="text-center text-gray-600 text-sm sm:text-base mb-6 sm:mb-8 animate-fade-in-up">
+        <p className="text-center text-gray-700 text-sm sm:text-base mb-6 sm:mb-8 animate-fade-in-up">
           Fill in your details and pay ₹99 to get your e-ticket. You&apos;ll receive the ticket by email and can download the PDF after payment.
         </p>
         <form
           onSubmit={handleSubmit}
-          className="space-y-4 sm:space-y-5 p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl bg-white/90 backdrop-blur shadow-2xl border-2 border-pink-200/50 card-holi animate-scale-in"
+          className="space-y-4 sm:space-y-5 p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl bg-white/95 backdrop-blur shadow-2xl card-border-holi card-holi animate-scale-in"
         >
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">Name *</label>
@@ -121,7 +121,7 @@ export default function RegistrationForm({ onPaymentSuccess }) {
               type="text"
               value={form.name}
               onChange={(e) => handleChange('name', e.target.value)}
-              className="input-holi w-full px-4 py-3 sm:py-3.5 rounded-xl border-2 border-gray-200 focus:border-pink-500 focus:ring-0 outline-none transition-all touch-target"
+              className="input-holi w-full px-4 py-3 sm:py-3.5 rounded-xl border-2 border-gray-200 focus:border-holi-magenta focus:ring-0 outline-none transition-all touch-target"
               placeholder="Your name"
             />
             {errors.name && <p className="text-red-600 text-sm mt-1">{errors.name}</p>}
@@ -134,7 +134,7 @@ export default function RegistrationForm({ onPaymentSuccess }) {
               maxLength={10}
               value={form.mobile}
               onChange={(e) => handleChange('mobile', e.target.value.replace(/\D/g, ''))}
-              className="input-holi w-full px-4 py-3 sm:py-3.5 rounded-xl border-2 border-gray-200 focus:border-pink-500 focus:ring-0 outline-none transition-all touch-target"
+              className="input-holi w-full px-4 py-3 sm:py-3.5 rounded-xl border-2 border-gray-200 focus:border-holi-magenta focus:ring-0 outline-none transition-all touch-target"
               placeholder="10 digit number"
             />
             {errors.mobile && <p className="text-red-600 text-sm mt-1">{errors.mobile}</p>}
@@ -145,7 +145,7 @@ export default function RegistrationForm({ onPaymentSuccess }) {
               type="email"
               value={form.email}
               onChange={(e) => handleChange('email', e.target.value)}
-              className="input-holi w-full px-4 py-3 sm:py-3.5 rounded-xl border-2 border-gray-200 focus:border-pink-500 focus:ring-0 outline-none transition-all touch-target"
+              className="input-holi w-full px-4 py-3 sm:py-3.5 rounded-xl border-2 border-gray-200 focus:border-holi-magenta focus:ring-0 outline-none transition-all touch-target"
               placeholder="email@example.com"
             />
             {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email}</p>}
@@ -155,7 +155,7 @@ export default function RegistrationForm({ onPaymentSuccess }) {
             <select
               value={form.gender}
               onChange={(e) => handleChange('gender', e.target.value)}
-              className="input-holi w-full px-4 py-3 sm:py-3.5 rounded-xl border-2 border-gray-200 focus:border-pink-500 focus:ring-0 outline-none transition-all bg-white touch-target"
+              className="input-holi w-full px-4 py-3 sm:py-3.5 rounded-xl border-2 border-gray-200 focus:border-holi-magenta focus:ring-0 outline-none transition-all bg-white touch-target"
             >
               <option value="">Select</option>
               {GENDERS.map((g) => (
@@ -170,7 +170,7 @@ export default function RegistrationForm({ onPaymentSuccess }) {
               value={form.address}
               onChange={(e) => handleChange('address', e.target.value)}
               rows={3}
-              className="input-holi w-full px-4 py-3 sm:py-3.5 rounded-xl border-2 border-gray-200 focus:border-pink-500 focus:ring-0 outline-none resize-none transition-all touch-target"
+              className="input-holi w-full px-4 py-3 sm:py-3.5 rounded-xl border-2 border-gray-200 focus:border-holi-magenta focus:ring-0 outline-none resize-none transition-all touch-target"
               placeholder="Full address"
             />
             {errors.address && <p className="text-red-600 text-sm mt-1">{errors.address}</p>}
@@ -178,7 +178,7 @@ export default function RegistrationForm({ onPaymentSuccess }) {
           <button
             type="submit"
             disabled={loading}
-            className="btn-holi w-full py-3.5 sm:py-4 rounded-xl font-bold bg-gradient-to-r from-pink-500 to-cyan-500 text-white disabled:opacity-70 flex items-center justify-center gap-2 touch-target min-h-[48px] text-base sm:text-lg"
+            className="btn-holi w-full py-3.5 sm:py-4 rounded-xl font-bold bg-gradient-to-r from-holi-magenta to-holi-green text-white disabled:opacity-70 flex items-center justify-center gap-2 touch-target min-h-[48px] text-base sm:text-lg neon-border"
           >
             {loading ? (
               <>
