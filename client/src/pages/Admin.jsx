@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import PageHeader from '../components/PageHeader';
@@ -10,9 +9,11 @@ export default function Admin() {
   const [authenticated, setAuthenticated] = useState(false);
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loggingIn, setLoggingIn] = useState(false);
   const [exporting, setExporting] = useState(false);
 
   const fetchList = async () => {
+    if (!password) return;
     setLoading(true);
     try {
       const { data } = await axios.get(`${API}/registrations`, {
@@ -23,25 +24,47 @@ export default function Admin() {
       if (err.response?.status === 401) {
         setAuthenticated(false);
         setPassword('');
+        setList([]);
+        toast.error('Invalid password');
+      } else {
+        toast.error(err.response?.data?.error || 'Failed to fetch');
       }
-      toast.error(err.response?.data?.error || 'Failed to fetch');
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    if (!authenticated || !password) return;
-    fetchList();
-  }, [authenticated, password]);
-
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (!password.trim()) {
+    const pwd = password.trim();
+    if (!pwd) {
       toast.error('Enter password');
       return;
     }
-    setAuthenticated(true);
+    setLoggingIn(true);
+    try {
+      const { data } = await axios.get(`${API}/registrations`, {
+        headers: { Authorization: `Bearer ${pwd}` },
+      });
+      setList(data);
+      setAuthenticated(true);
+      toast.success('Logged in');
+    } catch (err) {
+      if (err.response?.status === 401) {
+        toast.error('Invalid password');
+      } else {
+        toast.error(err.response?.data?.error || 'Login failed');
+      }
+    } finally {
+      setLoggingIn(false);
+    }
+  };
+
+  const handleLogout = () => {
+    setAuthenticated(false);
+    setPassword('');
+    setList([]);
+    toast.success('Logged out');
   };
 
   const handleExport = async () => {
@@ -59,8 +82,14 @@ export default function Admin() {
       window.URL.revokeObjectURL(url);
       toast.success('Excel downloaded');
     } catch (err) {
-      if (err.response?.status === 401) setAuthenticated(false);
-      toast.error(err.response?.data?.error || 'Export failed');
+      if (err.response?.status === 401) {
+        setAuthenticated(false);
+        setPassword('');
+        setList([]);
+        toast.error('Session expired. Please log in again.');
+      } else {
+        toast.error(err.response?.data?.error || 'Export failed');
+      }
     } finally {
       setExporting(false);
     }
@@ -85,9 +114,10 @@ export default function Admin() {
           />
           <button
             type="submit"
-            className="btn-holi w-full py-3 rounded-xl font-bold bg-gradient-to-r from-holi-magenta to-holi-green text-white min-h-[48px] neon-border"
+            disabled={loggingIn}
+            className="btn-holi w-full py-3 rounded-xl font-bold bg-gradient-to-r from-holi-magenta to-holi-green text-white min-h-[48px] neon-border disabled:opacity-70"
           >
-            Login
+            {loggingIn ? 'Verifying…' : 'Login'}
           </button>
         </form>
         </div>
@@ -103,6 +133,13 @@ export default function Admin() {
         <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-between gap-4 mb-6">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-holi-magenta to-holi-green">Registrations</h1>
           <div className="flex flex-wrap gap-2 sm:gap-3">
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="btn-holi px-4 py-3 rounded-xl bg-gray-600 hover:bg-gray-700 text-white font-semibold min-h-[44px]"
+            >
+              Logout
+            </button>
             <button
               onClick={fetchList}
               disabled={loading}
