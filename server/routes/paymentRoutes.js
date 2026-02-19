@@ -12,6 +12,12 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
+const isRazorpayConfigured = () => {
+  const id = process.env.RAZORPAY_KEY_ID;
+  const secret = process.env.RAZORPAY_KEY_SECRET;
+  return id && secret && id !== 'rzp_test_xxxx' && secret !== 'your_secret';
+};
+
 function generateTicketId() {
   const num = Math.floor(1000 + Math.random() * 9000);
   return `NH2026-${num}`;
@@ -19,6 +25,13 @@ function generateTicketId() {
 
 // POST /api/create-order
 router.post('/create-order', async (req, res) => {
+  if (!isRazorpayConfigured()) {
+    return res.status(503).json({
+      error: 'Payment gateway not configured',
+      code: 'RAZORPAY_CONFIG',
+      hint: 'Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in server/.env from Razorpay Dashboard → API Keys'
+    });
+  }
   try {
     const options = {
       amount: 9900, // ₹99 in paise
@@ -29,6 +42,13 @@ router.post('/create-order', async (req, res) => {
     res.json({ orderId: order.id, amount: order.amount, currency: order.currency });
   } catch (err) {
     console.error('Create order error:', err);
+    if (err.statusCode === 401) {
+      return res.status(503).json({
+        error: 'Payment gateway authentication failed',
+        code: 'RAZORPAY_AUTH',
+        hint: 'Check RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in server/.env (use test keys from Razorpay Dashboard)'
+      });
+    }
     res.status(500).json({ error: 'Failed to create order' });
   }
 });

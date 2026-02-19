@@ -7,8 +7,11 @@ const GENDERS = ['Male', 'Female', 'Other'];
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const mobileRegex = /^\d{10}$/;
 
+const PAYMENT_UNAVAILABLE_MESSAGE = 'Registration is temporarily unavailable. Please try again later or contact the event organizer.';
+
 export default function RegistrationForm({ onPaymentSuccess }) {
   const [loading, setLoading] = useState(false);
+  const [paymentUnavailable, setPaymentUnavailable] = useState(null);
   const [form, setForm] = useState({
     name: '',
     mobile: '',
@@ -53,6 +56,7 @@ export default function RegistrationForm({ onPaymentSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
+    setPaymentUnavailable(null);
     setLoading(true);
     try {
       const { data } = await axios.post(`${API}/create-order`);
@@ -96,8 +100,14 @@ export default function RegistrationForm({ onPaymentSuccess }) {
       });
       rzp.open();
     } catch (err) {
-      toast.error(err.response?.data?.error || 'Could not create order');
       setLoading(false);
+      const code = err.response?.data?.code;
+      const isConfigError = code === 'RAZORPAY_CONFIG' || code === 'RAZORPAY_AUTH';
+      if (isConfigError) {
+        setPaymentUnavailable(PAYMENT_UNAVAILABLE_MESSAGE);
+      } else {
+        toast.error(err.response?.data?.error || 'Something went wrong. Please try again.');
+      }
     }
   };
 
@@ -110,6 +120,27 @@ export default function RegistrationForm({ onPaymentSuccess }) {
         <p className="text-center text-gray-700 text-sm sm:text-base mb-6 sm:mb-8 animate-fade-in-up">
           Fill in your details and pay ₹99 to get your e-ticket. You&apos;ll receive the ticket by email and can download the PDF after payment.
         </p>
+        {paymentUnavailable && (
+          <div
+            role="alert"
+            className="mb-6 p-4 sm:p-5 rounded-2xl bg-amber-50 border-2 border-amber-200 text-amber-900 animate-fade-in-up"
+          >
+            <div className="flex gap-3">
+              <span className="flex-shrink-0 text-2xl" aria-hidden>⚠️</span>
+              <div className="min-w-0">
+                <p className="font-semibold text-amber-800">Registration temporarily unavailable</p>
+                <p className="mt-1 text-sm text-amber-800/90">{paymentUnavailable}</p>
+                <button
+                  type="button"
+                  onClick={() => setPaymentUnavailable(null)}
+                  className="mt-3 text-sm font-semibold text-amber-700 hover:text-amber-900 underline underline-offset-2"
+                >
+                  Try again
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         <form
           onSubmit={handleSubmit}
           className="space-y-4 sm:space-y-5 p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl bg-white/95 backdrop-blur shadow-2xl card-border-holi card-holi animate-scale-in"
