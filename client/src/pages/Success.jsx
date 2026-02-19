@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import PageHeader from '../components/PageHeader';
 
 const API = '/api';
 
@@ -14,11 +15,8 @@ export default function Success() {
   if (!ticketId) {
     return (
       <div className="min-h-screen splash-bg flex flex-col">
-        <header className="header-holi flex items-center justify-between px-4 py-3">
-          <Link to="/" className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-holi-magenta to-holi-green">Neon Holi 2026</Link>
-          <Link to="/" className="text-sm font-medium text-gray-700 hover:text-holi-magenta transition-colors">Home</Link>
-        </header>
-        <div className="flex flex-1 items-center justify-center px-4 py-12">
+        <PageHeader />
+        <div className="pt-14 sm:pt-16 flex flex-1 items-center justify-center px-4 py-12">
         <div className="text-center animate-scale-in max-w-sm w-full p-8 rounded-2xl bg-white/95 shadow-2xl card-border-holi card-holi">
           <p className="text-base sm:text-lg text-gray-800">No ticket found.</p>
           <button
@@ -55,11 +53,8 @@ export default function Success() {
 
   return (
     <div className="min-h-screen splash-bg">
-      <header className="header-holi flex items-center justify-between px-4 py-3">
-        <Link to="/" className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-holi-magenta to-holi-green">Neon Holi 2026</Link>
-        <Link to="/" className="text-sm font-medium text-gray-700 hover:text-holi-magenta transition-colors">Home</Link>
-      </header>
-      <div className="flex items-center justify-center px-4 py-12 sm:py-16">
+      <PageHeader />
+      <div className="pt-14 sm:pt-16 flex items-center justify-center px-4 py-12 sm:py-16">
       <div className="max-w-md w-full text-center p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-white/95 backdrop-blur shadow-2xl card-border-holi card-holi animate-scale-in">
         <div className="text-5xl sm:text-6xl mb-4">🎟️</div>
         <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-holi-magenta to-holi-green">Booking Successful!</h1>

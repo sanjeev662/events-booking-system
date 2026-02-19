@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import PageHeader from '../components/PageHeader';
 
 const API = '/api';
 
@@ -69,11 +70,8 @@ export default function Admin() {
   if (!authenticated) {
     return (
       <div className="min-h-screen splash-bg">
-        <header className="header-holi flex items-center justify-between px-4 py-3">
-          <Link to="/" className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-holi-magenta to-holi-green">Neon Holi 2026</Link>
-          <Link to="/" className="text-sm font-medium text-gray-700 hover:text-holi-magenta transition-colors">Home</Link>
-        </header>
-        <div className="flex items-center justify-center px-4 py-12">
+        <PageHeader />
+        <div className="pt-14 sm:pt-16 flex items-center justify-center px-4 py-12 min-h-screen">
         <form
           onSubmit={handleLogin}
           className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-white/95 backdrop-blur shadow-2xl card-border-holi max-w-sm w-full animate-scale-in"
@@ -100,11 +98,8 @@ export default function Admin() {
 
   return (
     <div className="min-h-screen splash-bg">
-      <header className="header-holi flex items-center justify-between px-4 py-3">
-        <Link to="/" className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-holi-magenta to-holi-green">Neon Holi 2026</Link>
-        <Link to="/" className="text-sm font-medium text-gray-700 hover:text-holi-magenta transition-colors">Home</Link>
-      </header>
-      <div className="py-6 sm:py-8 md:py-10 px-4 sm:px-6">
+      <PageHeader />
+      <div className="pt-14 sm:pt-16 py-6 sm:py-8 md:py-10 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-between gap-4 mb-6">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-holi-magenta to-holi-green">Registrations</h1>
