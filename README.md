@@ -185,3 +185,6 @@ Use and modify as per your project license.
 ---
 
 **Neon Holi Event 2026 – Ballia’s biggest neon celebration.**
+
+<img width="1470" height="956" alt="Screenshot 2026-02-20 at 11 41 46 AM" src="https://github.com/user-attachments/assets/9dd3ac5e-7b39-4172-8381-616c2ee56710" />
+
