@@ -1,113 +1,187 @@
 # Neon Holi Event 2026 – Ballia
 
-Event registration and ticketing web app for **Neon Holi Event 2026** at JMB Resort, Ballia. Users can view event details, register, pay ₹99 via Razorpay, and download a PDF ticket. Admin can view all registrations and export to Excel.
+Event registration and ticketing web app for **Neon Holi Event 2026** at JMB Resort, Ballia. Users can view event details, register, pay ₹99 via Razorpay, and download a PDF ticket. Admins can view all registrations and export to Excel.
 
-## Tech Stack
+---
 
-- **Frontend:** React (Vite), Tailwind CSS, Axios, Razorpay Checkout, React Router, React Hot Toast
-- **Backend:** Node.js, Express, Mongoose, Razorpay SDK, pdfkit, exceljs, qrcode
-- **Database:** MongoDB (Atlas-ready)
+## ✨ Features
 
-## Project Structure
+| Feature | Description |
+|--------|-------------|
+| **Event page** | Hero with event title, date (28 Feb 2026), time (02:00 PM), venue (JMB Resort, Ballia), entry ₹99, and highlights (Live DJ, Food Stalls, Neon Bands, Selfie Zone, Welcome Drink, VIP & Public Zones) |
+| **Registration** | Name, mobile (10 digits), email, gender, address with validation and error messages |
+| **Payment** | Razorpay Checkout (₹99) → order creation, signature verification, ticket ID `NH2026-XXXX`, QR code, and PDF ticket |
+| **Success** | Download ticket PDF; Razorpay sends payment receipt to customer email |
+| **Admin** | Password-protected `/admin`: view all registrations, **Download Excel** → `neon-holi-registrations.xlsx` |
+
+---
+
+## 🛠 Tech Stack
+
+| Layer | Stack |
+|-------|--------|
+| **Frontend** | React 19, Vite 7, Tailwind CSS 4, Axios, React Router 7, React Hot Toast |
+| **Backend** | Node.js, Express, Mongoose |
+| **Payments** | Razorpay (Checkout + SDK) |
+| **Docs & export** | pdfkit, exceljs, qrcode |
+| **Database** | MongoDB (Atlas-ready) |
+
+---
+
+## 📁 Project Structure
 
 ```
-HoliEvent/
-├── client/          # React frontend
-│   └── src/
-│       ├── components/  (Hero, Highlights, RegistrationForm)
-│       └── pages/       (Home, Success, Admin)
-├── server/          # Node backend
-│   ├── config/      (db.js)
-│   ├── models/      (Registration.js)
-│   ├── routes/      (paymentRoutes, adminRoutes)
-│   └── utils/       (generateTicket, generateQR)
-├── .env.example
-└── README.md
+events-booking-system/
+├── client/                 # React frontend
+│   ├── src/
+│   │   ├── components/     # Hero, SiteHeader, PageHeader, Highlights, AboutEvent, CountdownTicker, RegistrationForm
+│   │   ├── pages/          # Home, Success, Admin
+│   │   ├── api.js          # API client
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── public/
+│   └── package.json
+├── server/                 # Node backend
+│   ├── config/             # db.js (MongoDB connection)
+│   ├── models/             # Registration.js
+│   ├── routes/             # paymentRoutes.js, adminRoutes.js
+│   ├── utils/              # generateTicket.js, generateQR.js
+│   ├── server.js
+│   └── package.json
+├── .env.example            # (optional; see client & server .env.example)
+├── README.md               # This file
+└── client/README.md        # Frontend-specific docs
 ```
 
-## Setup
+---
 
-### 1. MongoDB
+## 🚀 Quick Start
 
-- Create a cluster at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
-- Get the connection string (e.g. `mongodb+srv://user:pass@cluster.mongodb.net/neonholi`).
+### Prerequisites
 
-### 2. Razorpay
+- **Node.js** 18+ and **npm**
+- **MongoDB** – [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) (or local)
+- **Razorpay** account – [Razorpay](https://razorpay.com/) (use **Test mode** for development)
 
-- Sign up at [Razorpay](https://razorpay.com/).
-- Dashboard → API Keys → Generate Key (use Test mode for development).
-- Note **Key ID** and **Key Secret**.
+### 1. Clone and install
 
-### 3. Backend
+```bash
+git clone <your-repo-url>
+cd events-booking-system
+```
+
+### 2. MongoDB
+
+- Create a cluster on [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+- Get your connection string (e.g. `mongodb+srv://user:pass@cluster.mongodb.net/neonholi`)
+
+### 3. Razorpay
+
+- Sign in at [Razorpay Dashboard](https://dashboard.razorpay.com/)
+- **Settings → API Keys** → Generate Key (Test mode for dev)
+- Copy **Key ID** and **Key Secret**
+
+### 4. Backend setup
 
 ```bash
 cd server
 cp .env.example .env
-# Edit .env and set:
-#   MONGODB_URI, RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET, ADMIN_PASSWORD
+```
+
+Edit `server/.env` and set:
+
+| Variable | What to set |
+|----------|----------------|
+| `MONGODB_URI` | Your MongoDB connection string |
+| `RAZORPAY_KEY_ID` | Razorpay Key ID |
+| `RAZORPAY_KEY_SECRET` | Razorpay Key Secret |
+| `ADMIN_PASSWORD` | Strong password for `/admin` |
+
+Then:
+
+```bash
 npm install
 npm run dev
 ```
 
-Server runs at **http://localhost:5000**.
+Backend runs at **http://localhost:5000**.
 
-### 4. Frontend
+### 5. Frontend setup
+
+Open a **new terminal**:
 
 ```bash
 cd client
 cp .env.example .env
-# Set VITE_RAZORPAY_KEY to your Razorpay Key ID (same as backend)
+```
+
+Edit `client/.env` and set:
+
+| Variable | What to set |
+|----------|----------------|
+| `VITE_RAZORPAY_KEY` | Same Razorpay Key ID as backend |
+| `VITE_BACKEND_URL` | `http://localhost:5000` (or leave empty to use Vite proxy) |
+
+Then:
+
+```bash
 npm install
 npm run dev
 ```
 
-App runs at **http://localhost:5173** and proxies `/api` to the backend.
-
-## Environment Variables
-
-**Server (`.env` in `server/`):**
-
-| Variable | Description |
-|----------|-------------|
-| `PORT` | Server port (default 5000) |
-| `MONGODB_URI` | MongoDB connection string |
-| `RAZORPAY_KEY_ID` | Razorpay Key ID |
-| `RAZORPAY_KEY_SECRET` | Razorpay Key Secret |
-| `ADMIN_PASSWORD` | Password for `/admin` |
-
-**Client (`.env` in `client/`):**
-
-| Variable | Description |
-|----------|-------------|
-| `VITE_RAZORPAY_KEY` | Razorpay Key ID (for Checkout) |
-
-## Features
-
-- **Hero:** Event title, date (28 Feb 2026), time (02:00 PM), venue (JMB Resort, Ballia), entry ₹99, CTA.
-- **Highlights:** Live DJ, Food Stalls, Neon Bands, Selfie Zone, Welcome Drink, VIP & Public Zones.
-- **Registration:** Name, Mobile (10 digits), Email, Gender, Address; validation and error messages.
-- **Payment:** Create order → Razorpay Checkout → Verify signature → Save registration, generate ticket ID `NH2026-XXXX`, QR code, and PDF.
-- **Success:** Download ticket PDF; Razorpay receipt is sent by Razorpay to customer email.
-- **Admin:** `/admin` – password-protected; table of registrations; **Download Excel** → `neon-holi-registrations.xlsx`.
-
-## API (Backend)
-
-| Method | Path | Description |
-|--------|------|-------------|
-| POST | `/api/create-order` | Create Razorpay order (₹99) |
-| POST | `/api/verify-payment` | Verify signature, save registration, generate PDF |
-| GET | `/api/download-ticket/:ticketId` | Download ticket PDF |
-| GET | `/api/registrations` | List all (Admin: `Authorization: Bearer <ADMIN_PASSWORD>`) |
-| GET | `/api/export-excel` | Excel export (Admin: same auth) |
-
-## Production
-
-- Set `MONGODB_URI` to your production cluster.
-- Use Razorpay **Live** keys and ensure webhook/signature verification is in place.
-- Set a strong `ADMIN_PASSWORD`.
-- Build frontend: `cd client && npm run build`; serve `dist/` with your preferred server or host.
-- Run backend with `npm start` (or a process manager) and ensure CORS/origin is configured for your frontend URL.
+Frontend runs at **http://localhost:6001** (default; see `VITE_DEV_PORT` in `client/.env.example`).
 
 ---
 
-**Neon Holi Event 2026 – Ballia’s Biggest Neon Celebration.**
+## 🔐 Environment Variables
+
+### Server (`server/.env`)
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `PORT` | No | Server port (default: `5000`) |
+| `MONGODB_URI` | Yes | MongoDB connection string |
+| `RAZORPAY_KEY_ID` | Yes | Razorpay Key ID |
+| `RAZORPAY_KEY_SECRET` | Yes | Razorpay Key Secret |
+| `ADMIN_PASSWORD` | Yes | Password for `/admin` (Bearer token) |
+
+### Client (`client/.env`)
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `VITE_RAZORPAY_KEY` | Yes | Razorpay Key ID (for Checkout) |
+| `VITE_BACKEND_URL` | No | Backend URL (e.g. `http://localhost:5000`). Empty = use Vite proxy `/api` |
+| `VITE_DEV_PORT` | No | Dev server port (default: `6001`) |
+
+---
+
+## 📡 API Reference
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/health` | Health check |
+| POST | `/api/create-order` | Create Razorpay order (₹99) |
+| POST | `/api/verify-payment` | Verify signature, save registration, generate PDF |
+| GET | `/api/download-ticket/:ticketId` | Download ticket PDF |
+| GET | `/api/registrations` | List all registrations (Admin: `Authorization: Bearer <ADMIN_PASSWORD>`) |
+| GET | `/api/export-excel` | Excel export (Admin: same header) |
+
+---
+
+## 🌐 Production
+
+1. Set `MONGODB_URI` to your production MongoDB cluster.
+2. Use Razorpay **Live** keys and keep signature verification enabled.
+3. Set a strong `ADMIN_PASSWORD`.
+4. Build frontend: `cd client && npm run build`; serve the `dist/` folder (e.g. Nginx, Vercel, Netlify).
+5. Run backend with `npm start` (or PM2/systemd) and set CORS/origin for your frontend URL.
+
+---
+
+## 📄 License
+
+Use and modify as per your project license.
+
+---
+
+**Neon Holi Event 2026 – Ballia’s biggest neon celebration.**

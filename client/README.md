@@ -1,16 +1,85 @@
-# React + Vite
+# Neon Holi Event – Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React frontend for **Neon Holi Event 2026** registration and ticketing. Built with Vite, Tailwind CSS, and React Router. Talks to the backend API for orders, payment verification, and ticket download.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🛠 Stack
 
-## React Compiler
+- **React 19** + **Vite 7**
+- **Tailwind CSS 4** (via `@tailwindcss/vite`)
+- **React Router 7** – `/`, `/success`, `/admin`
+- **Axios** – API calls
+- **React Hot Toast** – notifications
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 📁 Structure
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```
+client/
+├── src/
+│   ├── components/     # Reusable UI
+│   │   ├── Hero.jsx
+│   │   ├── SiteHeader.jsx
+│   │   ├── PageHeader.jsx
+│   │   ├── Highlights.jsx
+│   │   ├── AboutEvent.jsx
+│   │   ├── CountdownTicker.jsx
+│   │   └── RegistrationForm.jsx
+│   ├── pages/
+│   │   ├── Home.jsx    # Landing + registration
+│   │   ├── Success.jsx # Post-payment + ticket download
+│   │   └── Admin.jsx   # Registrations list + Excel export
+│   ├── api.js          # Backend API client
+│   ├── App.jsx
+│   ├── main.jsx
+│   └── index.css
+├── public/
+├── .env.example
+├── vite.config.js
+└── package.json
+```
+
+---
+
+## 🚀 Scripts
+
+| Command | Description |
+|--------|-------------|
+| `npm run dev` | Start dev server (default port from `VITE_DEV_PORT`, e.g. 6001) |
+| `npm run build` | Production build → `dist/` |
+| `npm run preview` | Preview production build locally |
+| `npm run lint` | Run ESLint |
+
+---
+
+## 🔐 Environment Variables
+
+Create `client/.env` from `client/.env.example`:
+
+| Variable | Description |
+|----------|-------------|
+| `VITE_RAZORPAY_KEY` | Razorpay Key ID (same as backend; used for Checkout) |
+| `VITE_BACKEND_URL` | Backend base URL (e.g. `http://localhost:5000`). Leave empty to use Vite proxy for `/api` |
+| `VITE_DEV_PORT` | Dev server port (default: `6001`; avoid ports like 6000, 6666 if needed) |
+
+---
+
+## 🔌 API Proxy
+
+In development, `vite.config.js` proxies `/api` to `VITE_BACKEND_URL` (default `http://localhost:5000`). So the frontend can call `/api/create-order`, `/api/verify-payment`, etc. without full URLs.
+
+---
+
+## 📦 Build & Deploy
+
+```bash
+npm run build
+```
+
+Serve the `dist/` folder with any static host (e.g. Vercel, Netlify, Nginx). Set `VITE_BACKEND_URL` to your production API URL before building, or configure your host to proxy `/api` to the backend.
+
+---
+
+For full setup (MongoDB, Razorpay, backend), see the [root README](../README.md).
