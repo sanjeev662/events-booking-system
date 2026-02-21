@@ -11,6 +11,7 @@ export default function Admin() {
   const [loading, setLoading] = useState(false);
   const [loggingIn, setLoggingIn] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [downloadingId, setDownloadingId] = useState(null);
 
   const fetchList = async () => {
     if (!password) return;
@@ -95,6 +96,30 @@ export default function Admin() {
     }
   };
 
+  const handleDownloadTicket = async (ticketId, name) => {
+    if (!ticketId) {
+      toast.error('No ticket available');
+      return;
+    }
+    setDownloadingId(ticketId);
+    try {
+      const res = await axios.get(`${API}/download-ticket/${ticketId}`, {
+        responseType: 'blob',
+      });
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `neon-holi-ticket-${ticketId}.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      toast.success(`Ticket for ${name} downloaded`);
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Ticket not found or download failed');
+    } finally {
+      setDownloadingId(null);
+    }
+  };
+
   if (!authenticated) {
     return (
       <div className="min-h-screen splash-bg">
@@ -160,7 +185,7 @@ export default function Admin() {
           {loading ? (
             <div className="p-8 sm:p-12 text-center text-gray-600">Loading…</div>
           ) : (
-            <table className="w-full text-left text-xs sm:text-sm min-w-[640px]">
+            <table className="w-full text-left text-xs sm:text-sm min-w-[720px]">
               <thead>
                 <tr className="bg-holi-magenta/10 border-b-2 border-holi-magenta/30">
                   <th className="p-2 sm:p-3 font-bold">Name</th>
@@ -170,11 +195,12 @@ export default function Admin() {
                   <th className="p-2 sm:p-3 font-bold hidden md:table-cell">Payment ID</th>
                   <th className="p-2 sm:p-3 font-bold">Ticket ID</th>
                   <th className="p-2 sm:p-3 font-bold">Date</th>
+                  <th className="p-2 sm:p-3 font-bold text-center">Ticket</th>
                 </tr>
               </thead>
               <tbody>
                 {list.length === 0 ? (
-                  <tr><td colSpan={7} className="p-6 sm:p-8 text-center text-gray-500">No registrations yet</td></tr>
+                  <tr><td colSpan={8} className="p-6 sm:p-8 text-center text-gray-500">No registrations yet</td></tr>
                 ) : (
                   list.map((r) => (
                     <tr key={r._id} className="border-b border-gray-200 hover:bg-holi-magenta/5 transition-colors">
@@ -185,6 +211,17 @@ export default function Admin() {
                       <td className="p-2 sm:p-3 font-mono text-xs truncate max-w-[100px] md:max-w-[140px] hidden md:table-cell">{r.paymentId || '–'}</td>
                       <td className="p-2 sm:p-3 font-mono">{r.ticketId || '–'}</td>
                       <td className="p-2 sm:p-3 text-gray-600 whitespace-nowrap">{r.createdAt ? new Date(r.createdAt).toLocaleString() : '–'}</td>
+                      <td className="p-2 sm:p-3 text-center">
+                        <button
+                          type="button"
+                          onClick={() => handleDownloadTicket(r.ticketId, r.name)}
+                          disabled={!r.ticketId || downloadingId === r.ticketId}
+                          className="btn-holi px-3 py-1.5 rounded-lg text-xs font-semibold bg-holi-magenta/90 hover:bg-holi-magenta text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                          title={r.ticketId ? 'Download PDF ticket' : 'Ticket PDF not available'}
+                        >
+                          {downloadingId === r.ticketId ? '…' : r.ticketId ? 'Download' : '–'}
+                        </button>
+                      </td>
                     </tr>
                   ))
                 )}

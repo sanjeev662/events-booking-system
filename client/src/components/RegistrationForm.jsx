@@ -59,7 +59,7 @@ export default function RegistrationForm({ onPaymentSuccess }) {
     setPaymentUnavailable(null);
     setLoading(true);
     try {
-      const { data } = await axios.post(`${API}/create-order`);
+      const { data } = await axios.post(`${API}/create-order`, form);
       await loadRazorpay();
       if (!window.Razorpay) {
         setLoading(false);

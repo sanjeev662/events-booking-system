@@ -4,7 +4,7 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { connectDB } from './config/db.js';
-import paymentRoutes from './routes/paymentRoutes.js';
+import paymentRoutes, { paymentWebhookHandler } from './routes/paymentRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -14,6 +14,10 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 app.use(cors({ origin: true, credentials: true }));
+
+// Webhook must receive raw body for signature verification - register before express.json()
+app.post('/api/payment-webhook', express.raw({ type: 'application/json' }), paymentWebhookHandler);
+
 app.use(express.json());
 
 app.use('/api', paymentRoutes);

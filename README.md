@@ -143,7 +143,10 @@ Frontend runs at **http://localhost:6001** (default; see `VITE_DEV_PORT` in `cli
 | `MONGODB_URI` | Yes | MongoDB connection string |
 | `RAZORPAY_KEY_ID` | Yes | Razorpay Key ID |
 | `RAZORPAY_KEY_SECRET` | Yes | Razorpay Key Secret |
+| `RAZORPAY_WEBHOOK_SECRET` | Yes* | Webhook secret – ensures payments are recorded even if user leaves tab (UPI/background) |
 | `ADMIN_PASSWORD` | Yes | Password for `/admin` (Bearer token) |
+
+\* Required for reliable recording when users complete UPI/background payments
 
 ### Client (`client/.env`)
 
@@ -160,11 +163,25 @@ Frontend runs at **http://localhost:6001** (default; see `VITE_DEV_PORT` in `cli
 | Method | Path | Description |
 |--------|------|-------------|
 | GET | `/api/health` | Health check |
-| POST | `/api/create-order` | Create Razorpay order (₹99) |
+| POST | `/api/create-order` | Create Razorpay order (₹99); accepts user data for webhook fallback |
 | POST | `/api/verify-payment` | Verify signature, save registration, generate PDF |
+| POST | `/api/payment-webhook` | Razorpay webhook – records payment when user leaves tab |
 | GET | `/api/download-ticket/:ticketId` | Download ticket PDF |
 | GET | `/api/registrations` | List all registrations (Admin: `Authorization: Bearer <ADMIN_PASSWORD>`) |
 | GET | `/api/export-excel` | Excel export (Admin: same header) |
+
+---
+
+## 🔔 Razorpay Webhook (recommended)
+
+To ensure payments are recorded **even when the user leaves the tab** (e.g. UPI via PhonePe/GPay):
+
+1. **Razorpay Dashboard** → **Settings** → **Webhooks** → **+ Add Webhook**
+2. **URL**: `https://your-domain.com/api/payment-webhook`
+3. **Events**: Subscribe to `payment.captured`
+4. Copy the **Secret** and set `RAZORPAY_WEBHOOK_SECRET` in `server/.env`
+
+For local testing, use [ngrok](https://ngrok.com/) or similar to expose your server and use that URL in Razorpay.
 
 ---
 
@@ -172,6 +189,7 @@ Frontend runs at **http://localhost:6001** (default; see `VITE_DEV_PORT` in `cli
 
 1. Set `MONGODB_URI` to your production MongoDB cluster.
 2. Use Razorpay **Live** keys and keep signature verification enabled.
+3. Configure the **webhook** (see above) so payments are recorded reliably.
 3. Set a strong `ADMIN_PASSWORD`.
 4. Build frontend: `cd client && npm run build`; serve the `dist/` folder (e.g. Nginx, Vercel, Netlify).
 5. Run backend with `npm start` (or PM2/systemd) and set CORS/origin for your frontend URL.
