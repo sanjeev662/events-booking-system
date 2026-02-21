@@ -3,8 +3,7 @@ import crypto from 'crypto';
 import Razorpay from 'razorpay';
 import Registration from '../models/Registration.js';
 import PendingOrder from '../models/PendingOrder.js';
-import { generateTicketPDF, getTicketPath } from '../utils/generateTicket.js';
-import fs from 'fs';
+import { streamTicketPDF } from '../utils/generateTicket.js';
 
 const router = express.Router();
 
@@ -44,15 +43,6 @@ async function createRegistrationIfNew(userData, paymentId, orderId) {
   });
   await registration.save();
   return { registration, isDuplicate: false };
-}
-
-/** Generate PDF without failing the response. Logs errors. */
-async function tryGeneratePDF(registration) {
-  try {
-    await generateTicketPDF(registration);
-  } catch (pdfErr) {
-    console.error('PDF generation failed for', registration.ticketId, pdfErr.message);
-  }
 }
 
 // POST /api/create-order (accepts user data to store for webhook fallback)
@@ -116,7 +106,6 @@ router.post('/verify-payment', async (req, res) => {
     if (!registration) return res.status(500).json({ error: 'Registration failed' });
 
     await PendingOrder.deleteOne({ orderId: razorpay_order_id }).catch(() => {});
-    await tryGeneratePDF(registration);
 
     res.json({
       success: true,
@@ -179,7 +168,6 @@ export async function paymentWebhookHandler(req, res) {
     };
     const { registration } = await createRegistrationIfNew(userData, paymentId, orderId);
     await PendingOrder.deleteOne({ orderId }).catch(() => {});
-    await tryGeneratePDF(registration);
     res.status(200).send('OK');
   } catch (err) {
     console.error('Webhook payment.captured error:', err);
@@ -187,13 +175,23 @@ export async function paymentWebhookHandler(req, res) {
   }
 }
 
-// GET /api/download-ticket/:ticketId
-router.get('/download-ticket/:ticketId', (req, res) => {
-  const filePath = getTicketPath(req.params.ticketId);
-  if (!fs.existsSync(filePath)) {
+// GET /api/download-ticket/:ticketId - generates ticket on-the-fly, no storage
+router.get('/download-ticket/:ticketId', async (req, res) => {
+  const { ticketId } = req.params;
+  const registration = await Registration.findOne({ ticketId }).lean();
+  if (!registration) {
     return res.status(404).json({ error: 'Ticket not found' });
   }
-  res.download(filePath, `neon-holi-ticket-${req.params.ticketId}.pdf`);
+  try {
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="neon-holi-ticket-${ticketId}.pdf"`);
+    await streamTicketPDF(registration, res);
+  } catch (err) {
+    console.error('Ticket generation on download:', err);
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'Failed to generate ticket' });
+    }
+  }
 });
 
 export default router;
